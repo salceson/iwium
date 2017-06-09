@@ -4,3 +4,4 @@ flask
 tensorflow
 matplotlib
 pandas
+h5py

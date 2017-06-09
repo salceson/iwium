@@ -140,5 +140,6 @@ ENV/
 .ropeproject
 
 *.npy
+*.dat
 
 .idea/
