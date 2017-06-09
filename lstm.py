@@ -19,8 +19,6 @@ y_train = yscaler.fit_transform(y_train)
 
 X_train = X_train.reshape(X_train.shape + (1,))
 
-max_X = np.max(np.max(X_train))
-
 model = Sequential()
 model.add(LSTM(4, input_shape=(window_size, 1)))
 model.add(Dense(1))
