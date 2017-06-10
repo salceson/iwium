@@ -35,15 +35,48 @@ if __name__ == '__main__':
     X_test_scaler = MinMaxScaler(feature_range=(0, 1))
     X_test_scaled = X_test_scaler.fit_transform(X_test)
 
-    predicted = auto_encoder.predict(X_test_scaled)
-    predicted_real = X_test_scaler.inverse_transform(predicted)
+    plt.ion()
+    fig, (ax1, ax2) = plt.subplots(2, 1)
+    max_input = np.amax(X_test)
+    min_input = 0
+    samples_count = X_test.shape[0]
 
-    delta = np.abs(X_test - predicted_real)
+    Xs = []
+    deltas = []
+    inputs = []
 
-    plt.figure(1)
-    plt.subplot(211)
-    plt.plot(X_test)
+    X_anomalies = []
+    Y_anomalies = []
 
-    plt.subplot(212)
-    plt.plot(delta)
+    for i in range(X_test_scaled.shape[0]):
+        sample = np.reshape(X_test[i], (1, -1))
+        sample_scaled = np.reshape(X_test_scaled[i], (1, -1))
+        predicted = auto_encoder.predict(sample_scaled)
+        predicted_real = X_test_scaler.inverse_transform(predicted)
+
+        delta = np.amax(np.abs(sample - predicted_real), axis=1)
+        deltas.append(delta)
+        input = X_test[i, window_size - 1]
+        inputs.append(input)
+        Xs.append(i)
+
+        if delta > 200:
+            X_anomalies.append(i)
+            Y_anomalies.append(input)
+
+        ax1.clear()
+        ax1.plot(Xs, inputs)
+        ax1.plot(X_anomalies, Y_anomalies, 'ro')
+        ax2.clear()
+        ax2.plot(Xs, deltas)
+
+        ax1.set_xlim([0, samples_count + 1])
+        ax1.set_ylim([min_input, max_input])
+        ax2.set_xlim([0, samples_count + 1])
+        ax2.set_ylim([min_input, max_input])
+
+        plt.draw()
+        plt.pause(0.01)
+
+    plt.ioff()
     plt.show()

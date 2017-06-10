@@ -17,7 +17,7 @@ def distort(distort_level):
 
 if __name__ == '__main__':
     window_size = 32
-    days = 365
+    days = 14
     hours = days * 24
     half_hours = hours * 2
     distortion = 0.1
@@ -32,7 +32,7 @@ if __name__ == '__main__':
     half_h = test_days * 24 * 2
     anomaly_observation = np.array(
         [distort(distortion) * 1000 * np.sin(np.pi / 24.0 * x * 0.5) ** 2 for x in range(int(half_h * 0.45))] +
-        [distort(distortion) * 0 * np.sin(np.pi / 24.0 * x * 0.5) ** 2 for x in range(int(half_h * 0.45), int(half_h * 0.7))] +
+        [distort(distortion) * 0 * np.sin(np.pi / 24.0 * x * 0.5) ** 2 + 250 for x in range(int(half_h * 0.45), int(half_h * 0.7))] +
         [distort(distortion) * 1000 * np.sin(np.pi / 24.0 * x * 0.5) ** 2 for x in range(int(half_h * 0.7), half_h)],
         dtype=int)
     X_anomaly = rolling_window(anomaly_observation, window_size)[:-1, :]
