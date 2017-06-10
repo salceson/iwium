@@ -1,11 +1,11 @@
-#!/usr/bin/env/python
+#!/usr/bin/env python
 # coding: utf-8
 
 import numpy as np
 from keras.layers import LSTM, Dense
 from keras.models import Sequential
-from sklearn.preprocessing import MinMaxScaler
 from matplotlib import pyplot as plt
+from sklearn.preprocessing import MinMaxScaler
 
 window_size = 32
 
