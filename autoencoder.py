@@ -54,13 +54,13 @@ if __name__ == '__main__':
         predicted = auto_encoder.predict(sample_scaled)
         predicted_real = X_test_scaler.inverse_transform(predicted)
 
-        delta = np.amax(np.abs(sample - predicted_real), axis=1)
+        delta = np.abs(sample - predicted_real)[0,window_size-1]
         deltas.append(delta)
         input = X_test[i, window_size - 1]
         inputs.append(input)
         Xs.append(i)
 
-        if delta > 200:
+        if delta > 150:
             X_anomalies.append(i)
             Y_anomalies.append(input)
 
