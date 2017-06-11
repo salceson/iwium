@@ -46,9 +46,11 @@ if __name__ == '__main__':
             Y_anomalies.append(input)
 
         ax1.clear()
+        ax1.set_title('Test data')
         ax1.plot(Xs, inputs)
         ax1.plot(X_anomalies, Y_anomalies, 'ro')
         ax2.clear()
+        ax2.set_title('Absolute error of the representation')
         ax2.plot(Xs, deltas)
 
         ax1.set_xlim([0, samples_count + 1])
