@@ -26,7 +26,7 @@ def build_model():
 
 
 if __name__ == '__main__':
-    X_train = np.load('sin2X_train.npy')
+    X_train = np.load('data/sin2X_train0_7.npy')
     scaler = MinMaxScaler(feature_range=(0, 1))
     X_train_scaled = scaler.fit_transform(X_train)
 
@@ -34,5 +34,5 @@ if __name__ == '__main__':
     auto_encoder.compile(optimizer='adadelta', loss='binary_crossentropy')
     auto_encoder.fit(X_train_scaled, X_train_scaled, epochs=100)
 
-    auto_encoder.save_weights('auto_encoder.dat')
-    joblib.dump(scaler, 'auto_encoder_scaler.dat')
+    auto_encoder.save_weights('models/auto_encoder.dat')
+    joblib.dump(scaler, 'models/auto_encoder_scaler.dat')

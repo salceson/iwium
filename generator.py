@@ -55,8 +55,8 @@ if __name__ == '__main__':
                 dtype=int)
             X = rolling_window(observations, window_size)[:-1, :]
             y = np.array(observations[window_size:])
-            np.save('in/sin2X_train' + str(test_no) + "_" + str(days), X)
-            np.save('in/sin2y_train' + str(test_no) + "_" + str(days), y)
+            np.save('data/sin2X_train' + str(test_no) + "_" + str(days), X)
+            np.save('data/sin2y_train' + str(test_no) + "_" + str(days), y)
 
             test_days = 7
             half_h = test_days * 24 * 2
@@ -68,5 +68,5 @@ if __name__ == '__main__':
                 dtype=int)
             X_anomaly = rolling_window(anomaly_observation, window_size)[:-1, :]
             y_anomaly = np.array(anomaly_observation[window_size:])
-            np.save('in/sin2X_test' + str(test_no) + "_" + str(days), X_anomaly)
-            np.save('in/sin2y_test' + str(test_no) + "_" + str(days), y_anomaly)
+            np.save('data/sin2X_test' + str(test_no) + "_" + str(days), X_anomaly)
+            np.save('data/sin2y_test' + str(test_no) + "_" + str(days), y_anomaly)
