@@ -2,51 +2,37 @@
 # coding: utf-8
 
 import numpy as np
-from keras.layers import LSTM, Dense
+from keras.layers import Dense, LSTM
 from keras.models import Sequential
-from matplotlib import pyplot as plt
+from sklearn.externals import joblib
 from sklearn.preprocessing import MinMaxScaler
 
 window_size = 32
 
-X_train = np.load('sin2X_train.npy')
-y_train = np.load('sin2y_train.npy')
 
-Xscaler = MinMaxScaler(feature_range=(0, 1))
-yscaler = MinMaxScaler(feature_range=(0, 1))
-X_train = Xscaler.fit_transform(X_train)
-y_train = yscaler.fit_transform(y_train)
+def build_model():
+    model = Sequential()
+    model.add(LSTM(4, input_shape=(window_size, 1)))
+    model.add(Dense(1))
+    return model
 
-X_train = X_train.reshape(X_train.shape + (1,))
 
-model = Sequential()
-model.add(LSTM(4, input_shape=(window_size, 1)))
-model.add(Dense(1))
-model.compile(loss='mean_squared_error', optimizer='adam')
+if __name__ == '__main__':
+    X_train = np.load('data/sin2X_train0_365.npy')
+    y_train = np.load('data/sin2y_train0_365.npy')
 
-print(model.summary())
+    Xscaler = MinMaxScaler(feature_range=(0, 1))
+    yscaler = MinMaxScaler(feature_range=(0, 1))
+    X_train = Xscaler.fit_transform(X_train)
+    y_train = yscaler.fit_transform(y_train)
 
-model.fit(X_train, y_train, epochs=2)
+    X_train = X_train.reshape(X_train.shape + (1,))
 
-# TEST
+    model = build_model()
+    model.compile(loss='mean_squared_error', optimizer='adam')
 
-X_test = np.load('sin2X_test.npy')
-y_test = np.load('sin2y_test.npy')
+    model.fit(X_train, y_train, epochs=5)
+    model.save_weights('models/lstm.dat')
 
-Xscaler = MinMaxScaler(feature_range=(0, 1))
-yscaler = MinMaxScaler(feature_range=(0, 1))
-X_test = Xscaler.fit_transform(X_test)
-y_test = yscaler.fit_transform(y_test)
-
-X_test = X_test.reshape(X_test.shape + (1,))
-
-y_real = yscaler.inverse_transform(y_test)
-predicted = model.predict(X_test)
-predicted_real = np.reshape(yscaler.inverse_transform(predicted), (len(y_real),))
-print(predicted_real, y_real)
-
-xs = np.array([0.5 * x for x in range(len(y_real))])
-
-plt.plot(xs[:500], y_real[:500], 'g-')
-plt.plot(xs[:500], predicted_real[:500], 'r-')
-plt.show()
+    joblib.dump(Xscaler, 'models/lstm_scaler_X.dat')
+    joblib.dump(yscaler, 'models/lstm_scaler_y.dat')
